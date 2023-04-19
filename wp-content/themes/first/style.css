@@ -20,8 +20,7 @@ body {
     font-size: 16px;
 }
 
-header[role=banner] {
-    height: 120px;
+header {
     border-bottom: 1px solid #000;
 }
 
@@ -44,4 +43,109 @@ header[role=banner] {
 	width: auto;
 	max-height: 140px;
 	border: 0;
+}
+
+/*-------------------------------------------------------------------------------
+  4.Common Menu Styles
+-------------------------------------------------------------------------------*/
+.menu li {
+    position: relative;
+}
+.menu li:hover > ul, .menu li.sfHover > ul {
+    display: block;
+}
+.menu li:hover > a, .menu li a:focus {
+    color: #fdb813;
+}
+.menu li ul {
+    position: absolute;
+    display: none;
+    top: 100%;
+    z-index: 1000;
+    width: 150px;
+    left: 1px;
+    background-color: #f3f3f3;
+}
+.menu li ul a {
+    display: block;
+    text-transform: capitalize;
+    border-width: 1px;
+    line-height: 32px;
+    font-size: 0.875em;
+    color: #222;
+}
+.menu li ul a:hover, .menu li ul a:focus {
+    background-color: #dadada;
+    color: #222;
+}
+.menu li ul ul {
+    left: 100%;
+}
+.menu li ul li {
+    text-align: left;
+}
+.menu li ul li:last-child a {
+    border-bottom: 0;
+}
+.menu a {
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+    color:#878787;
+}
+.menu > li {
+    display: block;
+    float: left;
+}
+.menu > li:last-child {
+    margin-right: 0;
+}
+.menu > li > a {
+    -moz-transition: 0.3s all;
+    -webkit-transition: 0.3s all;
+    transition: 0.3s all;
+    text-decoration: none;
+}
+.menu-button{
+    height: 92px;
+}
+.menu-button a{
+    line-height: 38px;
+    border-radius:4px;
+    padding:0 20px;
+    background-color:#fdb813;
+    color: black;
+    font-weight: bold;
+    font-size:16px;
+    margin-left:10px;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.menu-button a:hover, .menu-button a:focus{
+    background-color:#6e551a;
+    color:white;
+}
+/*-------------------------------------------------------------------------------
+  5.Header Menu Styles
+-------------------------------------------------------------------------------*/
+.primary-navigation{
+    height: 92px;
+    display:-webkit-box;
+    display:-ms-flexbox;
+    display:flex;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;    
+}
+.primary-navigation .menu > li:not(.menu-button) >  a{
+    line-height: 92px;
+}
+.current-menu-item a{
+    color: #fdb813;
 }
