@@ -44,10 +44,12 @@ function theme_setup() {
 }
 add_action( 'after_setup_theme', 'theme_setup');
 
-
-
-
-
+// Tworzenie własnych class dla body
+// Usuniecie dynamicznych class WP
+function custom_classes() {
+    return $my_custom_classes = array('first', 'second');
+}
+add_filter('body_class', 'custom_classes');
 
 
 
