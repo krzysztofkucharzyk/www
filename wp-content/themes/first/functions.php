@@ -19,7 +19,7 @@ function first_styles()
     );
     wp_enqueue_style(
         'superfish',
-        get_stylesheet_directory_uri() . '/assets.css.superfish.css',
+        get_stylesheet_directory_uri() . '/assets/css/superfish.css',
         array(),
         false,
         'all'
@@ -79,11 +79,11 @@ add_action('after_setup_theme', 'theme_setup');
 
 // Tworzenie własnych class dla body
 // Usuniecie dynamicznych class WP
-function custom_classes()
-{
-    return $my_custom_classes = array('first', 'second');
-}
-add_filter('body_class', 'custom_classes');
+// function custom_classes()
+// {
+//     return $my_custom_classes = array('first', 'second');
+// }
+// add_filter('body_class', 'custom_classes');
 
 
 

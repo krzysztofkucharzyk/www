@@ -21,11 +21,12 @@ body {
 }
 
 header {
+    height: 120px;
     border-bottom: 1px solid #000;
 }
 
 .logo{
-    height: 150px;
+    height: 120px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -41,7 +42,7 @@ header {
 
 .logo a img {
 	width: auto;
-	max-height: 140px;
+	max-height: 120px;
 	border: 0;
 }
 
@@ -107,7 +108,7 @@ header {
     text-decoration: none;
 }
 .menu-button{
-    height: 92px;
+    height: 120px;
 }
 .menu-button a{
     line-height: 38px;
@@ -132,7 +133,7 @@ header {
   5.Header Menu Styles
 -------------------------------------------------------------------------------*/
 .primary-navigation{
-    height: 92px;
+    height: 120px;
     display:-webkit-box;
     display:-ms-flexbox;
     display:flex;
@@ -144,7 +145,7 @@ header {
             align-items: center;    
 }
 .primary-navigation .menu > li:not(.menu-button) >  a{
-    line-height: 92px;
+    line-height: 120px;
 }
 .current-menu-item a{
     color: #fdb813;
