@@ -1,9 +1,9 @@
 /*
 Theme Name: First
-Theme URI: 
+Theme URI: http://localhost/www/
 Author: KK
-Author URI: 
-Description: 
+Author URI: http://localhost/www/
+Description: KK
 Version: 1.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,3 +13,35 @@ Tags: two-columns, right-sidebar, flexible-header, accessibility-ready, custom-c
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
 */
+
+
+body {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+}
+
+header[role=banner] {
+    height: 120px;
+    border-bottom: 1px solid #000;
+}
+
+.logo{
+    height: 150px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align:center;
+        -ms-flex-align:center;
+            align-items:center;
+}
+
+.logo a {
+	font-size: 20px;
+	display: block;
+}
+
+.logo a img {
+	width: auto;
+	max-height: 140px;
+	border: 0;
+}
