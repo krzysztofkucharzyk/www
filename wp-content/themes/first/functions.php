@@ -51,6 +51,13 @@ function first_scripts()
         '1.0.0',
         true
     );
+
+    $translation_array = array(
+        'email_placeholder' => esc_attr__('Wpisz swój adres e-mail', 'first'),
+        'name_placeholder'  => esc_html__('Wpisz swoje imię', 'first')
+    );
+    wp_localize_script('main-js', 'translated_text_object', $translation_array);
+
 }
 add_action('wp_enqueue_scripts', 'first_scripts');
 
@@ -74,6 +81,7 @@ function theme_setup()
             'footer' => esc_html__('Nawigacja dla footera', 'first'),
         )
     );
+
 }
 add_action('after_setup_theme', 'theme_setup');
 
@@ -86,6 +94,34 @@ add_action('after_setup_theme', 'theme_setup');
 // add_filter('body_class', 'custom_classes');
 
 
+function sidebars() {
+    register_sidebar( 
+        array(
+            'name'          => esc_html__( 'Footer one','first' ),
+            'id'            => 'footer-one',
+            'description'   => esc_html__( 'Stopka jeden', 'first' ),
+            'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+            'after_widget'  => '</aside>',
+            'before title'  => '<h4 class="widget-title">',
+            'after_title'   => '</h4>',
+        )
+    );
 
+    register_sidebar( 
+        array(
+            'name'          => esc_html__( 'Footer two','first' ),
+            'id'            => 'footer-two',
+            'description'   => esc_html__( 'Stopka dwa', 'first' ),
+            'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+            'after_widget'  => '</aside>',
+            'before title'  => '<h4 class="widget-title">',
+            'after_title'   => '</h4>',
+        )
+    );
+}
+add_action( 'widgets_init', 'sidebars' );
+
+
+add_filter('https_ssl_verify', '__return_false');
 
 ?>

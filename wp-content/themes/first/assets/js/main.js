@@ -19,4 +19,20 @@
        cssArrows: false
    });
      
- })(jQuery);
+ /* -----------------------------------------------------------------*/
+/* Add Placeholder to the Email input field of "Email Subscribers" widget
+/* -----------------------------------------------------------------*/
+if( $( '.widget input[type="email"]' ).length ){
+    $( '.widget input[type="email"]' ).attr('placeholder', translated_text_object.email_placeholder);
+}
+
+if( $( '.widget input[type="text"]' ).length ){
+    $( '.widget input[type="text"]' ).attr('placeholder', translated_text_object.name_placeholder);
+}
+
+
+
+
+})(jQuery);
+
+
