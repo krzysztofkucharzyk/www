@@ -121,7 +121,6 @@ function sidebars() {
 }
 add_action( 'widgets_init', 'sidebars' );
 
-
 add_filter('https_ssl_verify', '__return_false');
 
 ?>

@@ -13,14 +13,11 @@
 
  ?>
 
-<?php while ( have_posts() ): ?>
-    <?php the_post(); ?>
+<?php if ( have_posts()): while (have_posts()): the_post(); ?>
         <div class="content">
             <?php the_content() ?>
         </div>
-<?php endwhile; ?>
+<?php endwhile; else: endif; ?>
 
 
-
-
- <?php get_footer(); ?>
+<?php get_footer(); ?>
