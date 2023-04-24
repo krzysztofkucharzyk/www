@@ -73,6 +73,9 @@ function theme_setup()
     // Dodaje możliwość dodania logo
     add_theme_support('custom-logo');
 
+    //Dodaje możliwość dodania i wyświetlenia featured image
+    add_theme_support('post-thumbnails');
+
     // Dodaje możliwość korzystania z menu i ich dodawania
     // Translation ready using __()
     register_nav_menus(

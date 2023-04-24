@@ -20,9 +20,4 @@
 <?php endwhile; else: endif; ?>
 
 
-<<<<<<< HEAD
 <?php get_footer(); ?>
-=======
-
- <?php get_footer(); ?>
->>>>>>> 908ac8cb40dfefc2aa26626f2d4afa792ab90bc1
