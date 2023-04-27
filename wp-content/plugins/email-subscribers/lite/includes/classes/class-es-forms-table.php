@@ -338,7 +338,7 @@ class ES_Forms_Table extends ES_List_Table {
 	 *
 	 * @since 5.6.1
 	 * 
-	 * @modify 5.6.2
+	 * @modify 5.6.3
 	 */
 	public function show_success_message( $form_data ) {
 		$action_after_submit = ! empty( $form_data['settings']['action_after_submit'] ) ? $form_data['settings']['action_after_submit'] : 'show_success_message';
@@ -348,13 +348,13 @@ class ES_Forms_Table extends ES_List_Table {
 			<div class="block w-full">
 			<span class="block pr-4 text-sm font-medium text-gray-600 pb-2"><?php esc_html_e( 'after submit...', 'email-subscribers' ); ?></span>
 				<div class="py-2">
-					<input type="radio" name="form_data[settings][action_after_submit]" class="form-radio ig_es_action_after_submit" value="show_success_message" <?php checked( $action_after_submit, 'show_success_message' ); ?>/>
-					<label for="show_message"
+					<input id="success_message" type="radio" name="form_data[settings][action_after_submit]" class="form-radio ig_es_action_after_submit" value="show_success_message" <?php checked( $action_after_submit, 'show_success_message' ); ?>/>
+					<label for="success_message"
 						class="text-sm font-medium text-gray-500"><?php echo esc_html__( 'Show message', 'email-subscribers' ); ?>
 					</label>
 					<br>					
 					<div id="show_message_block" class="pt-2 px-6">												
-						<input id="success_message" class="form-input block border-gray-400 w-full pl-3 pr-3 shadow-sm  focus:bg-gray-100 sm:text-sm sm:leading-5" name="form_data[settings][success_message]" value="<?php echo esc_attr( stripslashes( $success_message ) ); ?>" />
+						<input class="form-input block border-gray-400 w-full pl-3 pr-3 shadow-sm  focus:bg-gray-100 sm:text-sm sm:leading-5" name="form_data[settings][success_message]" value="<?php echo esc_attr( stripslashes( $success_message ) ); ?>" />
 					</div>
 				</div>
 			</div>

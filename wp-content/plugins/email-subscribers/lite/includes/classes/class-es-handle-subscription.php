@@ -412,7 +412,8 @@ if ( ! class_exists( 'ES_Handle_Subscription' ) ) {
 
 							if ( 'redirect_to_url' === $action_after_submit ) {
 								$redirection_url             = ! empty( $form_settings['redirection_url'] ) ? $form_settings['redirection_url'] : '';
-								$response['redirection_url'] = $redirection_url;
+								$is_hash_not_added 		 	 = false === strpos( $redirection_url, '#' );
+								$response['redirection_url'] = $is_hash_not_added ? $redirection_url . '#' : $redirection_url;
 							}
 						} else {
 

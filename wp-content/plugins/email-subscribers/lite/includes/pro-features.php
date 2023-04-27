@@ -1816,7 +1816,7 @@ function ig_es_upsell_redirect_to_url() {
 		<a href="<?php echo esc_url( $pricing_url ); ?>" target="_blank">
 			<div class="block w-full mx-4 pb-8">
 				<div class="py-2">
-					<input type="radio" class="form-radio" id="show_redirect_to_url" />					
+					<input type="radio" class="form-radio" id="redirect_to_url" />					
 					<label for="redirect_to_url"
 						class="text-sm font-medium text-gray-500"><?php echo esc_html__( 'Redirect to url', 'email-subscribers' ); ?>
 					</label>

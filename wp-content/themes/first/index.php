@@ -25,50 +25,64 @@ $featured_image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 
 
 <div class="container">
     <div class="row">
-        <?php 
+        <?php if (have_posts()): ?>
+            <?php
+            $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
             $args = array(
-                'post_type'     => 'post',
-                'category_name' => 'advice',
+                'post_type' => 'post',
+                // 'category_name' => 'advice',
                 // 'cat'           => 4,
                 // 'category__in'  => 4,
-                'post_per_page' =>  9,
+                'posts_per_page' => 3,
+                'paged' => $paged,
+
             );
-        $query = new WP_Query($args);
-        while ($query->have_posts()): $query->the_post(); ?>
-        <?php if (have_posts()): ?>
+            $query = new WP_Query($args);
+            while ($query->have_posts()):
+                $query->the_post(); ?>
+
                 <div class="col-md-4">
                     <div class="post">
                         <?php if (has_post_thumbnail()): ?>
                             <div class="blog-post-thumbnail">
                                 <a href="<?php the_permalink(); ?>">
                                     <!-- <img src="<?php echo $featured_image[0]; ?>" alt=""> -->
-                                    <?php the_post_thumbnail( 'medium', array( 'class' => 'img-fluid' ) ); ?>
+                                    <?php the_post_thumbnail('new_size_300x250', array('class' => 'img-fluid')); ?>
                                 </a>
                             </div>
-                         <?php endif; ?>
+                        <?php endif; ?>
                         <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                        <?php $categories = get_the_category(); ?>
+                        <?php if (!empty($categories)): ?>
+                            <div class="posted-in">
+                                <span>
+                                    <?php _e('Posted In', 'nd_dosth'); ?>
+                                </span>
+                                <span>
+                                    <a href="<?php echo get_category_link($categories[0]->term_id); ?>"><?php echo $categories[0]->name; ?></a>
+                                </span>
+                            </div>
+                        <?php endif; ?>
                         <p>
                             <?php the_excerpt(); ?>
                         </p>
                         <a href="<?php the_permalink(); ?>" class="btn btn-primary"><?php _e('Czytaj więcej'); ?></a>
                     </div>
                 </div>
-            
+            <?php endwhile; ?>
+            <?php the_posts_pagination(
+                array(
+                    'prev_text' => __('Older Articles', 'textdomain'),
+                    'next_text' => __('Newer Articles', 'textdomain'),
+                )
+            ); ?>
         <?php else: ?>
             <p>
                 <?php _e('Nie znaleziono żadnego wpisu', 'first') ?>
             </p>
         <?php endif ?>
-        <?php endwhile; ?>
-
-        <div class="col-md-4">
-
-        </div>
-
     </div>
 </div>
-
-
 
 
 

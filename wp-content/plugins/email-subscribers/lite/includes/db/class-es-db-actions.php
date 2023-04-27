@@ -691,4 +691,17 @@ class ES_DB_Actions extends ES_DB {
 		}
 		return $result;
 	}
+
+	public function delete_by_mailing_queue_id( $mailing_queue_ids ) {
+		global $wpbd;
+
+		if ( ! empty( $mailing_queue_ids ) ) {
+			$mailing_queue_ids = esc_sql( $mailing_queue_ids );
+			$mailing_queue_ids = implode( ',', array_map( 'absint', $mailing_queue_ids ) );
+	
+			$wpbd->query(
+				"DELETE FROM {$wpbd->prefix}ig_actions WHERE message_id IN ($mailing_queue_ids)"
+			);
+		}
+	}
 }

@@ -297,6 +297,25 @@ class ES_DB_Mailing_Queue {
 		return $result[0];
 	}
 
+	public static function delete( $ids ) {
+		global $wpbd;
+
+		if ( empty( $ids ) ) {
+			return false;
+		}
+
+		$ids_count        = count( $ids );
+		$ids_placeholders = array_fill( 0, $ids_count, '%d' );
+
+		// Delete notification.
+		$wpbd->query(
+			$wpbd->prepare(
+				"DELETE FROM `{$wpbd->prefix}ig_mailing_queue` WHERE id IN( " . implode( ',', $ids_placeholders ) . ' );',
+				$ids
+			)
+		);
+	}
+
 
 	public static function delete_notifications( $ids ) {
 		global $wpbd;
@@ -607,5 +626,78 @@ class ES_DB_Mailing_Queue {
 			$avg_sending_interval = $total_interval / $campaigns_count;
 		} 
 		return $avg_sending_interval;
+	}
+
+	public static function get( $args = array() ) {
+		global $wpbd;
+		$fields         = ! empty( $args['fields'] ) ? $args['fields']                 : array();
+		$date_query     = ! empty( $args['date_query'] ) ? $args['date_query']         : array();
+		$campaign_types = ! empty( $args['campaign_types'] ) ? $args['campaign_types'] : array();
+		$statuses       = ! empty( $args['statuses'] ) ? $args['statuses'      ] : array();
+		$orders         = ! empty( $args['orders'] ) ? $args['orders']: array();
+
+		$select = 'SELECT';
+
+		if ( ! empty( $fields ) ) {
+			$select .= ' ' . implode( ', ', $fields );
+		} else {
+			$select .= ' * ';
+		}
+
+		$from = "FROM `{$wpbd->prefix}ig_mailing_queue`";
+		
+		$wheres = array();
+
+		if ( ! empty( $campaign_types ) ) {
+			$campaign_type_where = array();
+			foreach ( $campaign_types as $campaign_type ) {
+				$regex    = '.*"type";s:[0-9]+:"' . $campaign_type . '".*';
+				$campaign_type_where[] = $wpbd->prepare( '`meta` REGEXP %s', $regex );
+			}
+			$campaign_type_where = implode( ' OR ', array_unique( $campaign_type_where ) );
+			$wheres[] = 'AND ( ' . $campaign_type_where . ' )';
+		}
+
+		if ( ! empty( $statuses ) ) {
+			$status_count        = count( $statuses );
+			$status_placeholders = array_fill( 0, $status_count, '%s' );
+			$wheres[]           .= $wpbd->prepare( 'AND status IN( ' . implode( ',', $status_placeholders ) . ' )', $statuses );
+		}
+		
+		if ( ! empty( $date_query ) ) {
+			foreach ( $date_query as $query ) {
+				if ( ! empty( $query['column'] ) && ! empty( $query['operator'] ) && ! empty( $query['value'] ) ) {
+					$query_column   = $query['column'];
+					$query_operator = $query['operator'];
+					$query_value    = $query['value'];
+					$wheres[]       = $wpbd->prepare( 'AND ' . $query_column . ' ' . $query_operator . ' %s', $query_value );
+				}
+			}
+		}
+
+		$where = '';
+		if ( ! empty( $wheres ) ) {
+			$where = 'WHERE 1=1 ' . implode( "\n  ", array_unique( $wheres ) );
+		}
+
+		$order = '';
+		if ( ! empty( $orders ) ) {
+			$order = 'ORDER BY ' . implode( ', ', array_unique( $orders ) );
+		}
+
+		$query = $select . ' ' . $from . ' ' . $where . ' ' . $order;
+
+		if ( count( $fields ) === 1 ) {
+			$result = $wpbd->get_var(
+					$query
+			);
+		} else {
+			$result = $wpbd->get_results(
+				$query,
+				ARRAY_A
+			);
+		}
+
+		return $result;
 	}
 }

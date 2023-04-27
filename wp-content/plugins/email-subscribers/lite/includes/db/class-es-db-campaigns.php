@@ -914,4 +914,6 @@ class ES_DB_Campaigns extends ES_DB {
 
 		return $campaign_editor_count;
 	}
+
+	
 }

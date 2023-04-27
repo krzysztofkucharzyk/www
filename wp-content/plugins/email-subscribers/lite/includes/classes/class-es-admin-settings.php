@@ -439,6 +439,7 @@ class ES_Admin_Settings {
 		$test_email = ES_Common::get_admin_email();
 
 		$total_emails_sent = ES_Common::count_sent_emails();
+		$account_url       = ES()->mailer->get_current_mailer_account_url();
 
 		$email_sending_settings = array(
 			'ig_es_cronurl'                 => array(
@@ -476,7 +477,8 @@ class ES_Admin_Settings {
 				'default'      => 50,
 				'id'           => 'ig_es_hourly_email_send_limit',
 				'name'         => __( 'Maximum emails to send in an hour', 'email-subscribers' ),
-				'desc'         => __( 'Total emails your host can send in an hour.<br>Total emails sent in current hour: <b>' . $total_emails_sent . '</b>' , 'email-subscribers' ),
+				/* translators: 1. Break tag 2. ESP Account url with anchor tag 3. ESP name 4. Closing anchor tag */
+				'desc'         => __( 'Total emails sent in current hour: <b>' . $total_emails_sent . '</b>' , 'email-subscribers' ) . ( $account_url ? sprintf( __( '%1$sCheck sending limit from your %2$s%3$s\'s account%4$s.', 'email-subscribers' ), '<br/>', '<a href="' . esc_url( $account_url ) . '" target="_blank">', ES()->mailer->get_current_mailer_name(), '</a>' ) : '' ),
 			),
 
 			'ig_es_max_email_send_at_once'  => array(

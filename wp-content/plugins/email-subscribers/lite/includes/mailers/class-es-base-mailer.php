@@ -112,6 +112,8 @@ if ( ! class_exists( 'ES_Base_Mailer' ) ) {
 		 */
 		public $links = array();
 
+		protected $account_url = '';
+
 		/**
 		 * ES_Base_Mailer constructor.
 		 *
@@ -333,6 +335,10 @@ if ( ! class_exists( 'ES_Base_Mailer' ) ) {
 		public function handle_throttling() {
 			// Add ESP specific throttling logic here
 			// Should be ovverriden in the ESP mailer class
+		}
+
+		public function get_account_url() {
+			return $this->account_url;
 		}
 	}
 }

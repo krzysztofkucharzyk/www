@@ -1909,5 +1909,11 @@ if ( ! class_exists( 'ES_Mailer' ) ) {
 
 			$this->mailer = new $mailer_class();
 		}
+
+		public function get_current_mailer_account_url() {
+			$current_mailer_class = $this->get_current_mailer_class();
+			$current_mailer       = new $current_mailer_class();
+			return $current_mailer->get_account_url();
+		}
 	}
 }

@@ -568,7 +568,7 @@ class ES_Reports_Table extends ES_List_Table {
 			} else {
 				$notification_ids = absint( ig_es_get_request_data( 'list' ) );
 				ES_DB_Mailing_Queue::delete_notifications( array( $notification_ids ) );
-				ES_DB_Sending_Queue::delete_sending_queue_by_mailing_id( array( $notification_ids ) );
+				ES_DB_Sending_Queue::delete_by_mailing_queue_id( array( $notification_ids ) );
 				$message = __( 'Report deleted successfully!', 'email-subscribers' );
 				ES_Common::show_message( $message, 'success' );
 			}
@@ -582,7 +582,7 @@ class ES_Reports_Table extends ES_List_Table {
 
 			if ( count( $notification_ids ) > 0 ) {
 				ES_DB_Mailing_Queue::delete_notifications( $notification_ids );
-				ES_DB_Sending_Queue::delete_sending_queue_by_mailing_id( $notification_ids );
+				ES_DB_Sending_Queue::delete_by_mailing_queue_id( $notification_ids );
 				$message = __( 'Reports deleted successfully!', 'email-subscribers' );
 				ES_Common::show_message( $message, 'success' );
 			}

@@ -87,8 +87,10 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 					}
 				}
 			} else {
-				$this->campaign_data['type']                = $this->get_campaign_type_from_url();
-				$this->campaign_data['meta']['editor_type'] = $this->get_editor_type_from_url();
+				if ( empty( $this->campaign_data ) ) {
+					$this->campaign_data['type']                = $this->get_campaign_type_from_url();
+					$this->campaign_data['meta']['editor_type'] = $this->get_editor_type_from_url();
+				}
 			}
 		}
 
@@ -157,7 +159,7 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 						if ( ! empty( $meta['list_conditions'] ) ) {
 							$meta['list_conditions'] = IG_ES_Campaign_Rules::remove_empty_conditions( $meta['list_conditions'] );
 						}
-
+						
 						$meta = apply_filters( 'ig_es_before_save_campaign_meta', $meta, $campaign_data );
 
 						$campaign_data['meta'] = maybe_serialize( $meta );
@@ -173,14 +175,26 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 						$campaign_status = ! $is_updating_campaign && $campaign_saved ? 'campaign_created' : 'error';
 						$campaign_status = $is_updating_campaign && $campaign_saved ? 'campaign_updated' : 'error';
 
-						$campaign_scheduled = false;
-
 						if ( 'schedule' === $campaign_action ) {
-							$campaign_scheduled = self::schedule_campaign( $campaign_data );
-							if ( $campaign_scheduled ) {
-								$campaign_status = 'campaign_scheduled';
+							if ( empty( $meta['list_conditions'] ) ) {
+								$error_message = __( 'No recipients were found. Please add some recipients.', 'email-subscribers' );
 							} else {
-								$campaign_status = 'error';
+								$scheduling_status = self::schedule_campaign( $campaign_data );
+								if ( 'success' !== $scheduling_status ) {
+									if ( 'emails_not_queued' === $scheduling_status ) {
+										$error_message = __( 'Campaign not scheduled. Please check if there are some recipients according to the selected campaign rules.', 'email-subscribers' );
+									} elseif ( '' === $scheduling_status ) {
+										$error_message = __( 'Campaign not scheduled due to some error. Please try again later.', 'email-subscribers' );
+									}
+								}
+							}
+							if ( ! empty( $error_message ) ) {
+								
+								$campaign_data['status'] = IG_ES_CAMPAIGN_STATUS_IN_ACTIVE; // Revert back camaign status to inactive(draft), if scheduling fails.
+								self::save_campaign( $campaign_data );
+								$this->campaign_data = ig_es_get_request_data( 'campaign_data' );
+								ES_Common::show_message( $error_message, 'error' );
+								return;
 							}
 						}
 
@@ -192,6 +206,7 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 				} else {
 					$message = __( 'Sorry, you are not allowed to add/edit campaign.', 'email-subscribers' );
 					ES_Common::show_message( $message, 'error' );
+					return;
 				}
 			}
 		}
@@ -1100,13 +1115,13 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 		 * Schedule a campaign
 		 *
 		 * @param array $data
-		 * @return boolean $campaign_scheduled
+		 * @return string $scheduling_status
 		 *
 		 * @since 5.3.3
 		 */
 		public static function schedule_campaign( $data ) {
 
-			$campaign_scheduled = false;
+			$scheduling_status = '';
 			if ( ! empty( $data['id'] ) ) {
 				$campaign_id   = ! empty( $data['id'] ) ? $data['id'] : 0;
 				$campaign_meta = ES()->campaigns_db->get_campaign_meta_by_id( $campaign_id );
@@ -1162,12 +1177,12 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 					if ( $should_queue_emails ) {
 						$list_ids = '';
 						// Delete existing sending queue if any already present.
-						ES_DB_Sending_Queue::delete_sending_queue_by_mailing_id( array( $mailing_queue_id ) );
-						$email_queued = ES_DB_Sending_Queue::queue_emails( $mailing_queue_id, $mailing_queue_hash, $campaign_id, $list_ids );
-						if ( $email_queued ) {
-							$campaign_scheduled = true;
+						ES_DB_Sending_Queue::delete_by_mailing_queue_id( array( $mailing_queue_id ) );
+						$emails_queued = ES_DB_Sending_Queue::queue_emails( $mailing_queue_id, $mailing_queue_hash, $campaign_id, $list_ids );
+						if ( $emails_queued ) {
+							$scheduling_status = 'success';
 						} else {
-							$campaign_scheduled = false;
+							$scheduling_status = 'emails_not_queued';
 						}
 					}
 
@@ -1190,7 +1205,7 @@ if ( ! class_exists( 'ES_Campaign_Admin' ) ) {
 				}
 			}
 
-			return $campaign_scheduled;
+			return $scheduling_status;
 		}
 
 		public function add_campaign_body_data( $campaign_data ) {

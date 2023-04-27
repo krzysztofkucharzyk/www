@@ -6,7 +6,7 @@ Tags: email marketing, subscription, autoresponder, post notification, welcome e
 Requires at least: 3.9
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 5.6.3
+Stable tag: 5.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses
 
@@ -447,14 +447,23 @@ Refer [here](https://www.icegram.com/documentation/es-faq/).
 
 == Upgrade Notice ==
 
-= 5.6.3 =
+= 5.6.4 =
 
-* New: Option to redirect subscribers after subscription
-* New: Weekly summary email
-* Fix: Duplicate posts issue in post digest notifications [MAX]
-* Fix: Database error when creating custom field [MAX]
+* New: Housekeeping option for campaigns[MAX]
+* Enhancement: Added link for checking ESPs sending limits in Email sending settings 
+* Fix: Post notification shortcode issue with Divi theme
+* Fix: Campaign sending to all recipients when no recipients selected
+* Fix: Form id in form redirection URL
 
 == Changelog ==
+
+**5.6.4 (26.04.2023)**
+
+* New: Housekeeping option for campaigns[MAX]
+* Enhancement: Added link for checking ESPs sending limits in Email sending settings 
+* Fix: Post notification shortcode issue with Divi theme
+* Fix: Campaign sending to all recipients when no recipients selected
+* Fix: Form id in form redirection URL
 
 **5.6.3 (20.04.2023)**
 

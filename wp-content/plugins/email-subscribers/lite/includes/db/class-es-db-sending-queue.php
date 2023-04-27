@@ -327,7 +327,7 @@ class ES_DB_Sending_Queue {
 	 * @param int          $campaign_id Campaign ID.
 	 * @param array|string $list_ids List IDs seperated by commas if string i.e. '1,2,3' or array( 1, 2, 3 ) if array.
 	 *
-	 * @return bool $email_queued Emails queued or not.
+	 * @return bool $emails_queued Emails queued or not.
 	 *
 	 * @since 4.6.4
 	 */
@@ -335,10 +335,10 @@ class ES_DB_Sending_Queue {
 
 		global $wpbd;
 
-		$email_queued = false;
+		$emails_queued = false;
 
 		if ( empty( $mailing_queue_id ) || empty( $mailing_queue_hash ) || empty( $campaign_id ) ) {
-			return $email_queued;
+			return $emails_queued;
 		}
 
 		$column_defaults = self::get_column_defaults();
@@ -443,7 +443,7 @@ class ES_DB_Sending_Queue {
 
 		// Check if contacts added.
 		if ( ! empty( $total_contacts_added ) ) {
-			$email_queued = true;
+			$emails_queued = true;
 		} else {
 			// Delete report if there aren't any emails queued.
 			ES_DB_Mailing_Queue::delete_notifications( array( $mailing_queue_id ) );
@@ -470,11 +470,11 @@ class ES_DB_Sending_Queue {
 				$delivery_data['subscribers']      = $subscribers;
 				$delivery_data['campaign_id']      = $campaign_id;
 				$delivery_data['mailing_queue_id'] = $mailing_queue_id;
-				$email_queued                      = self::do_batch_insert( $delivery_data );
+				$emails_queued                      = self::do_batch_insert( $delivery_data );
 			}
 		}
 
-		if ( $email_queued ) {
+		if ( $emails_queued ) {
 			$data = array(
 				'count' => $total_contacts_added,
 				'status' => IG_ES_MAILING_QUEUE_STATUS_QUEUED
@@ -482,7 +482,7 @@ class ES_DB_Sending_Queue {
 			ES_DB_Mailing_Queue::update_mailing_queue( $mailing_queue_id, $data );
 		}
 
-		return $email_queued;
+		return $emails_queued;
 	}
 
 	public static function update_viewed_status( $guid = '', $email = '', $message_id = 0 ) {
@@ -688,15 +688,17 @@ class ES_DB_Sending_Queue {
 		$wpbd->query( $query );
 	}
 
-	public static function delete_sending_queue_by_mailing_id( $mailing_queue_ids ) {
+	public static function delete_by_mailing_queue_id( $mailing_queue_ids ) {
 		global $wpbd;
 
-		$mailing_queue_ids = esc_sql( $mailing_queue_ids );
-		$mailing_queue_ids = implode( ',', array_map( 'absint', $mailing_queue_ids ) );
+		if ( ! empty( $mailing_queue_ids ) ) {
+			$mailing_queue_ids = esc_sql( $mailing_queue_ids );
+			$mailing_queue_ids = implode( ',', array_map( 'absint', $mailing_queue_ids ) );
 
-		$wpbd->query(
-			"DELETE FROM {$wpbd->prefix}ig_sending_queue WHERE mailing_queue_id IN ($mailing_queue_ids)"
-		);
+			$wpbd->query(
+				"DELETE FROM {$wpbd->prefix}ig_sending_queue WHERE mailing_queue_id IN ($mailing_queue_ids)"
+			);
+		}
 	}
 
 	// Query to get total viewed emails per report

@@ -757,16 +757,21 @@ class Email_Subscribers_Admin {
 		$response_data = array();
 
 		if ( ! empty( $conditions ) ) {
+			$conditions = IG_ES_Campaign_Rules::remove_empty_conditions( $conditions );
 			if ( 'yes' === $get_count ) {
-				$args                   = array(
-					'lists'             => $list_id,
-					'conditions'        => $conditions,
-					'status'            => $status,
-					'subscriber_status' => array( 'verified' ),
-					'return_count'      => true,
-				);
-				$query                  = new IG_ES_Subscribers_Query();
-				$response_data['total'] = $query->run( $args );
+				if ( ! empty( $conditions ) ) {
+					$args                   = array(
+						'lists'             => $list_id,
+						'conditions'        => $conditions,
+						'status'            => $status,
+						'subscriber_status' => array( 'verified' ),
+						'return_count'      => true,
+					);
+					$query                  = new IG_ES_Subscribers_Query();
+					$response_data['total'] = $query->run( $args );
+				} else {
+					$response_data['total'] = 0;
+				}
 			}
 			ob_start();
 			do_action( 'ig_es_campaign_show_conditions', $conditions );

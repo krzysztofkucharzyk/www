@@ -76,6 +76,9 @@ function theme_setup()
     //Dodaje możliwość dodania i wyświetlenia featured image
     add_theme_support('post-thumbnails');
 
+    //Dodanie customowego rozmiaru obrazka
+    add_image_size('new_size_300x250', 300, 250, true);
+
     // Dodaje możliwość korzystania z menu i ich dodawania
     // Translation ready using __()
     register_nav_menus(
@@ -125,5 +128,19 @@ function sidebars() {
 add_action( 'widgets_init', 'sidebars' );
 
 add_filter('https_ssl_verify', '__return_false');
+
+
+
+//Zmienia długośc tekstu wstępnego
+function exc_length() {
+    return 20;
+}
+add_filter('excerpt_length', 'exc_length');
+
+//Zmienia [...] na co chcesz
+function exc_more() {
+    return '...';
+}
+add_filter('excerpt_more', 'exc_more');
 
 ?>

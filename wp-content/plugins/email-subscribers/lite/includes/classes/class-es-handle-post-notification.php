@@ -272,7 +272,7 @@ class ES_Handle_Post_Notification {
 		// Get post description
 		$post_description_length = 50;
 		$post_description        = $post->post_content;
-		$post_description        = strip_tags( strip_shortcodes( $post_description ) );
+		$post_description        = strip_tags( self::strip_shortcodes( $post_description ) );
 		$words                   = explode( ' ', $post_description, $post_description_length + 1 );
 		if ( count( $words ) > $post_description_length ) {
 			array_pop( $words );
@@ -294,7 +294,7 @@ class ES_Handle_Post_Notification {
 		// Get text before the more(<!--more-->) tag.
 		$text_before_more_tag = $more_tag_data['main'];
 		$strip_excluded_tags  = ig_es_get_strip_excluded_tags();
-		$text_before_more_tag = strip_tags( strip_shortcodes( $text_before_more_tag ), implode( '', $strip_excluded_tags ) );
+		$text_before_more_tag = strip_tags( self::strip_shortcodes( $text_before_more_tag ), implode( '', $strip_excluded_tags ) );
 		$es_templ_body        = str_replace( '{{POSTMORETAG}}', $text_before_more_tag, $es_templ_body );
 		$es_templ_body        = str_replace( '{{post.more_tag}}', $text_before_more_tag, $es_templ_body );
 
@@ -562,6 +562,11 @@ class ES_Handle_Post_Notification {
 		}
 
 		return $notice_text;
+	}
+
+	public static function strip_shortcodes( $content ) {
+		$content = preg_replace('/\[[^\[\]]*\]/', '', $content);
+		return $content;
 	}
 
 }
